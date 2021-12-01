@@ -17,7 +17,6 @@ export function getNumberOfIncreasesWindowed(measurements: number[]): number {
     let increases = 0;
 
     for (let i = 0; i < measurements.length; i++) {
-
         const firstTotal = getWindowTotal(measurements, i);
         const secondTotal = getWindowTotal(measurements, i + 1);
 
@@ -29,9 +28,8 @@ export function getNumberOfIncreasesWindowed(measurements: number[]): number {
     return increases;
 }
 
-
 const getWindowTotal = (series: number[], index: number) => {
     const window = series.slice(index, index + 3);
     if (window.length < 3) return 0;
-    return window.reduce((total, x) => total += x, 0);
-}
+    return window.reduce((total, x) => (total += x), 0);
+};
