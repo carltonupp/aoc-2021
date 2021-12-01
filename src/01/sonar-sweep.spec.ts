@@ -1,15 +1,14 @@
-import { getNumberOfIncreases } from "./sonar-sweep";
-import { readFile } from 'fs';
+import { getNumberOfIncreases, getNumberOfIncreasesWindowed } from "./sonar-sweep";
+import { readFileSync } from 'fs';
 
 describe('Sonar Sweep', () => {
 
     let officialInputs: number[];
 
     beforeAll(() => {
-        readFile('./src/01/input.txt', 'utf-8', (err, data) => {
-            if (err) throw err;
-            officialInputs = data.toString().split('\n').map(x => Number.parseInt(x));
-        });
+        const file = readFileSync('./src/01/input.txt', 'utf-8');
+        officialInputs = file.toString().split('\n').map(x => Number.parseInt(x));
+
     });
 
     it('Should return correct number of increases', () => {
@@ -19,11 +18,18 @@ describe('Sonar Sweep', () => {
     });
 
     it('Should return correct number given official test inputs', () => {
-        readFile('./src/01/input.txt', 'utf-8', (err, data) => {
-            if (err) throw err;
-            
-            const result = getNumberOfIncreases(officialInputs);
-            expect(result).toEqual(1532);
-        });
+        const result = getNumberOfIncreases(officialInputs);
+        expect(result).toEqual(1532);
+    });
+
+    it('Should return correct number of increases windowed', () => {
+        const testData = [1, 2, 3, 4, 5];
+        const result = getNumberOfIncreasesWindowed(testData);
+        expect(result).toEqual(2);
+    });
+
+    it('Should return correct number of increases windowed given official test inputs', () => {
+        const result = getNumberOfIncreasesWindowed(officialInputs);
+        expect(result).toEqual(1571);
     });
 });
