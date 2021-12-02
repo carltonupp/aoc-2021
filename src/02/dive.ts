@@ -29,26 +29,30 @@ function isDirection(direction: string): direction is Direction {
 class Position {
     private vertical: number;
     private horizontal: number;
+    private aim: number;
 
     constructor() {
         this.vertical = 0;
         this.horizontal = 0;
+        this.aim = 0;
     }
 
     move(cmd: Command) {
         switch (cmd.direction) {
             case 'down':
-                this.vertical += cmd.units;
+                this.aim += cmd.units;
                 break;
             case 'up':
-                this.vertical -= cmd.units;
+                this.aim -= cmd.units;
                 break;
             case 'forward':
                 this.horizontal += cmd.units;
+                this.vertical += this.aim * cmd.units;
                 break;
             default:
                 throw new Error('Invalid command');
         }
+        console.log(`horizontal: ${this.horizontal}, vertical: ${this.vertical}, aim: ${this.aim}`);
     }
 
     get() {
