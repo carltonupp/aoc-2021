@@ -50,17 +50,16 @@ class Position {
                 throw new Error('Invalid command');
         }
     }
-    
+
     get() {
         return this.horizontal * this.vertical;
     }
 }
 
-
 export function getPosition(commands: string[]): number {
-    let position = new Position();
+    const position = new Position();
 
-    for (let command of commands) {
+    for (const command of commands) {
         const [direction, units] = command.split(' ');
         const unitsValue = Number.parseInt(units);
         position.move(new Command(direction, unitsValue));

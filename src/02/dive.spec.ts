@@ -1,4 +1,4 @@
-import { getPosition } from "./dive";
+import { getPosition } from './dive';
 
 describe('Dive!', () => {
     it('Should return correct position given series of commands', () => {
