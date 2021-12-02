@@ -52,7 +52,6 @@ class Position {
             default:
                 throw new Error('Invalid command');
         }
-        console.log(`horizontal: ${this.horizontal}, vertical: ${this.vertical}, aim: ${this.aim}`);
     }
 
     get() {
