@@ -1,29 +1,61 @@
-import { parse } from 'path/posix';
-
 export function diagnosticReport(numbers: string[]): number {
-    let gamma = '';
-    let episilon = '';
-
-    for (let i = 0; i < numbers.length; i++) {
-        const digits = numbers.map((n) => n[i]);
-        const mostCommon = mode(digits);
-        const leastCommon = mostCommon === '1' ? '0' : '1';
-        gamma += mostCommon ?? '';
-        episilon += leastCommon;
-    }
-
-    const gammaInt = parseInt(gamma, 2);
-    const episilonInt = parseInt(episilon, 2);
-
-    console.log(gammaInt, episilonInt);
-
-    return parseInt(gamma, 2) * parseInt(episilon, 2);
+    const report = new Report(numbers);
+    const result = report.run();
+    return result.powerConsumption;
 }
 
-function mode(array: string[]): string | undefined {
-    return array
-        .sort((a, b) => {
-            return array.filter((v) => v === a).length - array.filter((v) => v === b).length;
-        })
-        .pop();
+class ReportResult {
+    constructor(private gamma: string, private epsilon: string) {}
+
+    public get gammaValue(): number {
+        return parseInt(this.gamma, 2);
+    }
+
+    public get epsilonValue(): number {
+        return parseInt(this.epsilon, 2);
+    }
+
+    public get powerConsumption(): number {
+        return this.gammaValue * this.epsilonValue;
+    }
+}
+
+class Report {
+    private gamma = '';
+    private epsilon = '';
+
+    constructor(private readonly series: string[]) {}
+
+    run(): ReportResult {
+        const byteLength = this.series.map((s) => s.length)[0];
+        for (let i = 0; i < byteLength; i++) {
+            console.log(i);
+            [this.gamma, this.epsilon] = this.getRates(i);
+        }
+
+        return new ReportResult(this.gamma, this.epsilon);
+    }
+
+    private getRates(i: number): [string, string] {
+        const [g, e] = this.analyseSlice(this.series.map((n: string) => n[i]));
+        return [this.gamma + g, this.epsilon + e];
+    }
+
+    private analyseSlice(slice: string[]): [string, string] {
+        let ones = 0;
+        let zeroes = 0;
+
+        for (const digit of slice) {
+            if (digit == '1') {
+                ones++;
+            } else if (digit == '0') {
+                zeroes++;
+            } else {
+                console.log(`IMPOSTER: ${digit}`);
+            }
+        }
+        console.log(`1s: ${ones}, 0s: ${zeroes}, total: ${ones + zeroes}`);
+
+        return ones > zeroes ? ['1', '0'] : ['0', '1'];
+    }
 }
